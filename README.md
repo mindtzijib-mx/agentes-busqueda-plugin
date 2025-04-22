@@ -1,0 +1,1 @@
+# Plugin personalizado para Wordpress

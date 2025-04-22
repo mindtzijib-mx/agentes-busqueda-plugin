@@ -7,13 +7,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const cardsContainer = document.querySelectorAll(".cards-container");
   const loadingIndicator = document.getElementById("loading-indicator"); // Referencia al indicador de carga
 
+  let abortController;
+
   function performSearch() {
     const query = searchInput.value.trim();
     const codigoPostal = codigoPostalInput.value.trim();
     const estado = estadoInput.value.trim();
-    console.log(codigoPostal);
 
-    if (query.length < 1) {
+    // Cancelar la solicitud anterior si existe
+    if (abortController) {
+      abortController.abort();
+    }
+
+    // Crear un nuevo controlador de abortos
+    abortController = new AbortController();
+    const signal = abortController.signal;
+
+    if (query.length < 1 && codigoPostal.length < 1 && estado.length < 1) {
       searchResults.innerHTML = ""; // Limpiar resultados si la consulta es muy corta
       searchResults.style.display = "none"; // Ocultar el contenedor
       loadingIndicator.style.display = "none";
@@ -46,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Realizar la solicitud a la API personalizada
-    fetch(apiUrl)
+    fetch(apiUrl, { signal })
       .then((response) => response.json())
       .then((posts) => {
         searchResults.innerHTML = ""; // Limpiar resultados anteriores
@@ -98,7 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
               switch (category) {
                 case "agentes":
                   postElement.innerHTML = `<article class="parent agent-profile">
-                            <div class="grid-profile-image">
+                            <div class="grid-profile-image" style="background-image: url(${
+                              post.imagen_perfil
+                            });
+                                background-size: cover;
+                                background-position: center;">
                             <img
                                 src="${post.imagen_perfil}"
                                 alt="${post.title}"  }"
@@ -164,10 +178,14 @@ document.addEventListener("DOMContentLoaded", function () {
                   break;
                 case "contratistas":
                   postElement.innerHTML = `<article class="parent contractor-profile">
-                            <div class="grid-profile-image">
+                            <div class="grid-profile-image" style="background-image: url(${
+                              post.imagen_perfil
+                            });
+                                background-size: cover;
+                                background-position: center;">
                             <img
                                 src="${post.imagen_perfil}"
-                                alt="${post.title}"
+                                alt="${post.title}"  }"
                                 class="profile-picture"
                             />
                             </div>
@@ -230,10 +248,14 @@ document.addEventListener("DOMContentLoaded", function () {
                   break;
                 case "inversionistas":
                   postElement.innerHTML = `<article class="parent banker-profile">
-                            <div class="grid-profile-image">
+                            <div class="grid-profile-image" style="background-image: url(${
+                              post.imagen_perfil
+                            });
+                                background-size: cover;
+                                background-position: center;">
                             <img
                                 src="${post.imagen_perfil}"
-                                alt="${post.title}"
+                                alt="${post.title}"  }"
                                 class="profile-picture"
                             />
                             </div>
@@ -318,6 +340,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       })
       .catch((error) => {
+        if (error.name === "AbortError") {
+          console.log("Solicitud cancelada debido a una nueva búsqueda.");
+          return;
+        }
         console.error("Error al buscar:", error);
         searchResults.innerHTML =
           "<p>Ocurrió un error. Inténtalo de nuevo más tarde.</p>";

@@ -93,12 +93,14 @@ class AgentesBusquedaPlugin {
                         $content .= '
                                 
                         <article class="parent agent-profile">
-                            <div class="grid-profile-image">
-                            <img
-                                src="' . get_field("imagen_perfil")["sizes"]["medium"] . '"
-                                alt="Profile Picture"
-                                class="profile-picture"
-                            />
+                            <div class="grid-profile-image" style="background-image: url(' . get_field("imagen_perfil")["sizes"]["medium"] . ');
+                                background-size: cover;
+                                background-position: center;">
+                                <img
+                                    src="' . get_field("imagen_perfil")["sizes"]["medium"] . '"
+                                    alt="Profile Picture"
+                                    class="profile-picture"
+                                />
                             </div>
                             <div class="grid-cell grid-title grid-cell-title">
                             Agente de Bienes Raíces
@@ -188,12 +190,14 @@ class AgentesBusquedaPlugin {
     
                 $content .= '
                     <article class="parent contractor-profile">
-                        <div class="grid-profile-image">
-                        <img
-                            src="' . get_field("imagen_perfil")["sizes"]["medium"] . '"
-                            alt="Profile Picture"
-                            class="profile-picture"
-                        />
+                        <div class="grid-profile-image" style="background-image: url(' . get_field("imagen_perfil")["sizes"]["medium"] . ');
+                                background-size: cover;
+                                background-position: center;">
+                            <img
+                                src="' . get_field("imagen_perfil")["sizes"]["medium"] . '"
+                                alt="Profile Picture"
+                                class="profile-picture"
+                            />
                         </div>
                         <div class="grid-cell grid-title grid-cell-title">Contratista</div>
                         <div class="grid-cell grid-name">' . get_the_title() . '</div>
@@ -281,8 +285,10 @@ class AgentesBusquedaPlugin {
     
                 $content .= '
                     <article class="parent banker-profile">
-                        <div class="grid-profile-image">
-                        <img
+                        <div class="grid-profile-image" style="background-image: url(' . get_field("imagen_perfil")["sizes"]["medium"] . ');
+                                background-size: cover;
+                                background-position: center;">
+                                <img
                             src="' . get_field("imagen_perfil")["sizes"]["medium"] . '"
                             alt="Profile Picture"
                             class="profile-picture"

@@ -126,6 +126,7 @@
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
+  display: none;
 }
 .grid-title {
   grid-area: 1 / 3 / 2 / 7;
@@ -273,7 +274,7 @@
 }
 
 .search-bar {
-  width: 1000px;
+  width: 90%;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 10px;
@@ -319,6 +320,12 @@
     padding: 4px;
   }
 
+  .search-bar {
+    width: 90%;
+    grid-template-columns: 1fr;
+    padding: 5px;
+  }
+
   .profile-picture {
     max-width: 130px;
   }
@@ -330,11 +337,6 @@
 }
 
 @media (max-width: 768px) {
-  .search-bar {
-    width: 90%;
-    grid-template-columns: 1fr;
-    padding: 5px;
-  }
   .main-cards-section {
     display: grid;
   }
@@ -354,9 +356,16 @@
     justify-self: center;
   }
 
+  .profile-picture {
+    display: block;
+  }
+
   .grid-profile-image {
     grid-area: 1 / 1 / 3 / 3;
     padding: 20px 0;
+    background-image: none !important;
+    background-size: none;
+    background-position: none;
   }
 
   .grid-title {
