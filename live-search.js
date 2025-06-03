@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     abortController = new AbortController();
     const signal = abortController.signal;
 
-    if (query.length < 1 && codigoPostal.length < 1 && estado.length < 1) {
+    if (query.length < 3 && codigoPostal.length < 1 && estado.length < 1) {
       searchResults.innerHTML = ""; // Limpiar resultados si la consulta es muy corta
       searchResults.style.display = "none"; // Ocultar el contenedor
       loadingIndicator.style.display = "none";
@@ -47,7 +47,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Construir la URL de la API personalizada
-    let apiUrl = `/wp-json/custom/v1/search?s=${encodeURIComponent(query)}`;
+    let apiUrl = `/wp-json/custom/v1/search?post_type=${encodeURIComponent(
+      query
+    )}`;
     if (codigoPostal) {
       apiUrl += `&codigo_postal=${encodeURIComponent(codigoPostal)}`;
     }

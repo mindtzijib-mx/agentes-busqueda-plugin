@@ -43,7 +43,7 @@ class AgentesBusquedaPlugin {
 
         $content .= '
             <section class="search-bar">
-                <input type="text" id="search-input" placeholder="Agentes, Contratistas, Inversionistas" />
+                <input type="text" id="search-input" placeholder="Teclee Agentes, Contratistas o Inversionistas para filtrar" />
                 <input type="text" id="codigo-postal-input" placeholder="Código postal" />
                 <input type="text" id="estado-input" placeholder="Estado" />
             </section>
