@@ -55,16 +55,26 @@ function custom_search_endpoint($request) {
                 'title' => get_the_title(),
                 'link' => get_permalink(),
                 'category' => get_post_type(), // Categorizar por tipo de post
+                'is_pro_user' => get_field('is_pro_user'),
                 'imagen_perfil' => get_field('imagen_perfil')['sizes']['medium'] ?? '',
-                'descripcion' => get_field('descripcion') ?? '',
                 'mobile' => get_field('mobile') ?? '',
-                'idiomas' => get_field('idiomas') ?? '',
                 'ciudad' => get_field('ciudad') ?? '',
                 'estado' => get_field('estado') ?? '',
+                'link_sitio_web' => get_field("link_sitio_web"),
                 'codigo_postal' => get_field('codigo_postal') ?? '',
+                'link_casa_1' => get_field("link_casa_1") ?? '',
+                'link_casa_2' => get_field("link_casa_2") ?? '',
+                'link_casa_3' => get_field("link_casa_3") ?? '',
+                'link_casa_4' => get_field("link_casa_4") ?? '',
+                'servicio_1' => get_field("servicio_1") ?? '',
+                'servicio_2' => get_field("servicio_2") ?? '',
+                'servicio_3' => get_field("servicio_3") ?? '',
+                'servicio_4' => get_field("servicio_4") ?? '',
                 'facebook_link' => get_field('facebook_link') ?? '',
                 'instagram_link' => get_field('instagram_link') ?? '',
                 'tiktok_link' => get_field('tiktok_link') ?? '',
+                'link_podcast' => get_field('link_podcast') ?? '',
+                'numero_podcast' => get_field('numero_podcast') ?? '',
             );
         }
     }

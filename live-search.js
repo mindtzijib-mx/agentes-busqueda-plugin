@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     abortController = new AbortController();
     const signal = abortController.signal;
 
-    if (query.length < 3 && codigoPostal.length < 1 && estado.length < 1) {
+    if (query.length < 6 && codigoPostal.length < 1 && estado.length < 1) {
       searchResults.innerHTML = ""; // Limpiar resultados si la consulta es muy corta
       searchResults.style.display = "none"; // Ocultar el contenedor
       loadingIndicator.style.display = "none";
@@ -95,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const categorySection = document.createElement("div");
             categorySection.classList.add("category-section");
             categorySection.innerHTML = `
-                <h2>${capitalizeFirstLetter(category)}</h2>
+                <h2 class="category-section__title">${capitalizeFirstLetter(
+                  category
+                )}</h2>
                 <div class="category-results"></div>
               `;
 
@@ -103,227 +105,204 @@ document.addEventListener("DOMContentLoaded", function () {
               categorySection.querySelector(".category-results");
 
             groupedResults[category].forEach((post) => {
+              let linkHomeExist = false;
+              let serviceExist = false;
+
+              if (
+                post.link_casa_1 ||
+                post.link_casa_2 ||
+                post.link_casa_3 ||
+                post.link_casa_4
+              ) {
+                linkHomeExist = true;
+              }
+
+              if (
+                post.servicio_1 ||
+                post.servicio_2 ||
+                post.servicio_3 ||
+                post.servicio_4
+              ) {
+                serviceExist = true;
+              }
+
               const postElement = document.createElement("div");
               postElement.classList.add("search-result");
-              postElement.innerHTML =
-                '<section class="banker-container cards-container">;';
-              switch (category) {
-                case "agentes":
-                  postElement.innerHTML = `<article class="parent agent-profile">
-                            <div class="grid-profile-image" style="background-image: url(${
-                              post.imagen_perfil
-                            });
-                                background-size: cover;
-                                background-position: center;">
-                            <img
-                                src="${post.imagen_perfil}"
-                                alt="${post.title}"  }"
-                                class="profile-picture"
-                            />
-                            </div>
-                            <div class="grid-cell grid-title grid-cell-title">
-                            Agente de Bienes Raíces
-                            </div>
-                            <div class="grid-cell grid-name">${post.title}</div>
-                            <div class="grid-cell grid-description">
-                            ${post.descripcion}
-                            </div>
-                            <div class="grid-cell grid-mobile grid-cell-title">
-                            <i class="fa-solid fa-phone-volume grid-icon"></i>
-                            </div>
-                            <div class="grid-cell grid-number">
-                                ${post.mobile}
-                            </div>
-                            <div class="grid-cell grid-language grid-cell-title">Idiomas</div>
-                            <div class="grid-cell grid-languages">
-                                ${post.idiomas}
-                            </div>
-                            <div class="grid-cell grid-social grid-cell-title">Redes sociales</div>
-                            <div class="grid-cell grid-city-title grid-cell-title">Ciudad</div>
-                            <div class="grid-cell grid-city-name">
-                                ${post.ciudad}
-                            </div>
-                            <div class="grid-cell grid-state-title grid-cell-title">Estado</div>
-                            <div class="grid-cell grid-state-name">
-                                ${post.estado}
-                            </div>
-                            <div class="grid-cell grid-social-names">
+              postElement.innerHTML = `
+                <article class="modern-card ${
+                  post.category == "agentes"
+                    ? "agent-profile"
+                    : post.category == "contratistas"
+                    ? "contractor-profile"
+                    : "banker-profile"
+                }">
+                        <section class="basic-info">
+                        <div class="${
+                          post.is_pro_user
+                            ? "profile-picture-container profile-picture-container-pro"
+                            : "profile-picture-container"
+                        }">
+                        <img
+                            src="${post.imagen_perfil}"
+                            alt="Profile Picture"
+                            class="profile-picture"
+                        />
+                        <div class="profile-picture-label ${
+                          post.is_pro_user
+                            ? "profile-picture-label profile-picture-label-pro"
+                            : "profile-picture-label"
+                        }">Pro</div>
+                        </div>
+                        <h3 class="modern-card-title">${post.title}</h3>
+                        <div class="phone-container">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>${post.mobile}</span>
+                        </div>
+                        <div class="social-media">
+                        ${
+                          post.facebook_link
+                            ? `<a href="${post.facebook_link}" class="grid-icon">
+                                    <i class="fa-brands fa-facebook"></i>
+                                </a>`
+                            : ""
+                        }
+                        ${
+                          post.instagram_link
+                            ? `<a href="${post.instagram_link}" class="grid-icon">
+                                    <i class="fa-brands fa-instagram"></i>
+                                </a>`
+                            : ""
+                        }
+                        ${
+                          post.tiktok_link
+                            ? `<a href="${post.tiktok_link}" class="grid-icon">
+                                  <i class="fa-brands fa-tiktok"></i>
+                              </a>`
+                            : ""
+                        }
+                        </div>
+                        </section>
+                        <section class="main-info">
+                        <div class="main-info-presentation">
+                            <h2 class="main-info-title">${
+                              post.category == "agentes"
+                                ? "Agente Inmobiliario"
+                                : post.category == "contratistas"
+                                ? "Contratista"
+                                : "Inversionista"
+                            }</h2>
+                            <div class="website-container">
+                            <i class="fa-solid fa-globe"></i>
                             ${
-                              post.facebook_link
-                                ? `<a href="${post.facebook_link}" class="grid-icon grid-icon-black">
-                                                <i class="fa-brands fa-facebook"></i>
-                                            </a>`
-                                : ""
-                            }
-                            ${
-                              post.instagram_link
-                                ? `<a href="${post.instagram_link}" class="grid-icon grid-icon-black">
-                                                  <i class="fa-brands fa-instagram"></i>
-                                              </a>`
-                                : ""
-                            }
-                            ${
-                              post.tiktok_link
-                                ? `<a href="${post.tiktok_link}" class="grid-icon grid-icon-black">
-                                                    <i class="fa-brands fa-tiktok"></i>
-                                                </a>`
-                                : ""
-                            }
-                            </div>
-                            <div class="grid-cell grid-codepost-title grid-cell-title">
-                            Código Postal
-                            </div>
-                            <div class="grid-cell grid-codepost-numbers">
-                                ${post.codigo_postal}                          
-                            </div>
-                        </article>`;
-                  break;
-                case "contratistas":
-                  postElement.innerHTML = `<article class="parent contractor-profile">
-                            <div class="grid-profile-image" style="background-image: url(${
-                              post.imagen_perfil
-                            });
-                                background-size: cover;
-                                background-position: center;">
-                            <img
-                                src="${post.imagen_perfil}"
-                                alt="${post.title}"  }"
-                                class="profile-picture"
-                            />
-                            </div>
-                            <div class="grid-cell grid-title grid-cell-title">
-                            Contratista
-                            </div>
-                            <div class="grid-cell grid-name">${post.title}</div>
-                            <div class="grid-cell grid-description">
-                            ${post.descripcion}
-                            </div>
-                            <div class="grid-cell grid-mobile grid-cell-title">
-                            <i class="fa-solid fa-phone-volume grid-icon"></i>
-                            </div>
-                            <div class="grid-cell grid-number">
-                                ${post.mobile}
-                            </div>
-                            <div class="grid-cell grid-language grid-cell-title">Idiomas</div>
-                            <div class="grid-cell grid-languages">
-                                ${post.idiomas}
-                            </div>
-                            <div class="grid-cell grid-social grid-cell-title">Redes sociales</div>
-                            <div class="grid-cell grid-city-title grid-cell-title">Ciudad</div>
-                            <div class="grid-cell grid-city-name">
-                                ${post.ciudad}
-                            </div>
-                            <div class="grid-cell grid-state-title grid-cell-title">Estado</div>
-                            <div class="grid-cell grid-state-name">
-                                ${post.estado}
-                            </div>
-                            <div class="grid-cell grid-social-names">
-                            ${
-                              post.facebook_link
-                                ? `<a href="${post.facebook_link}" class="grid-icon grid-icon-black">
-                                                <i class="fa-brands fa-facebook"></i>
-                                            </a>`
-                                : ""
-                            }
-                            ${
-                              post.instagram_link
-                                ? `<a href="${post.instagram_link}" class="grid-icon grid-icon-black">
-                                                  <i class="fa-brands fa-instagram"></i>
-                                              </a>`
-                                : ""
-                            }
-                            ${
-                              post.tiktok_link
-                                ? `<a href="${post.tiktok_link}" class="grid-icon grid-icon-black">
-                                                    <i class="fa-brands fa-tiktok"></i>
-                                                </a>`
-                                : ""
+                              post.link_sitio_web
+                                ? `<a href="#">${post.link_sitio_web}</a>`
+                                : "Sin sitio web"
                             }
                             </div>
-                            <div class="grid-cell grid-codepost-title grid-cell-title">
-                            Código Postal
-                            </div>
-                            <div class="grid-cell grid-codepost-numbers">
-                                ${post.codigo_postal}                          
-                            </div>
-                        </article>`;
-                  break;
-                case "inversionistas":
-                  postElement.innerHTML = `<article class="parent banker-profile">
-                            <div class="grid-profile-image" style="background-image: url(${
-                              post.imagen_perfil
-                            });
-                                background-size: cover;
-                                background-position: center;">
-                            <img
-                                src="${post.imagen_perfil}"
-                                alt="${post.title}"  }"
-                                class="profile-picture"
-                            />
-                            </div>
-                            <div class="grid-cell grid-title grid-cell-title">
-                            Inversionista
-                            </div>
-                            <div class="grid-cell grid-name">${post.title}</div>
-                            <div class="grid-cell grid-description">
-                            ${post.descripcion}
-                            </div>
-                            <div class="grid-cell grid-mobile grid-cell-title">
-                            <i class="fa-solid fa-phone-volume grid-icon"></i>
-                            </div>
-                            <div class="grid-cell grid-number">
-                                ${post.mobile}
-                            </div>
-                            <div class="grid-cell grid-language grid-cell-title">Idiomas</div>
-                            <div class="grid-cell grid-languages">
-                                ${post.idiomas}
-                            </div>
-                            <div class="grid-cell grid-social grid-cell-title">Redes sociales</div>
-                            <div class="grid-cell grid-city-title grid-cell-title">Ciudad</div>
-                            <div class="grid-cell grid-city-name">
-                                ${post.ciudad}
-                            </div>
-                            <div class="grid-cell grid-state-title grid-cell-title">Estado</div>
-                            <div class="grid-cell grid-state-name">
-                                ${post.estado}
-                            </div>
-                            <div class="grid-cell grid-social-names">
-                            ${
-                              post.facebook_link
-                                ? `<a href="${post.facebook_link}" class="grid-icon grid-icon-white">
-                                                <i class="fa-brands fa-facebook"></i>
-                                            </a>`
-                                : ""
-                            }
-                            ${
-                              post.instagram_link
-                                ? `<a href="${post.instagram_link}" class="grid-icon grid-icon-white">
-                                                  <i class="fa-brands fa-instagram"></i>
-                                              </a>`
-                                : ""
-                            }
-                            ${
-                              post.tiktok_link
-                                ? `<a href="${post.tiktok_link}" class="grid-icon grid-icon-white">
-                                                    <i class="fa-brands fa-tiktok"></i>
-                                                </a>`
-                                : ""
-                            }
-                            </div>
-                            <div class="grid-cell grid-codepost-title grid-cell-title">
-                            Código Postal
-                            </div>
-                            <div class="grid-cell grid-codepost-numbers">
-                                ${post.codigo_postal}                          
-                            </div>
-                        </article>`;
-                  break;
+                        </div>
 
-                default:
-                  postElement.innerHTML = `<p>${post.title}</p>`;
-                  break;
-              }
-              postElement.innerHTML += `</section>`;
+                        ${
+                          post.category == "contratistas"
+                            ? `
+                            
+                            ${
+                              serviceExist
+                                ? `
+                            <div class="services-container">
+                            <h4>Mis servicios</h4>
+                              <ul class="services-list-container">
+                              ${
+                                post.servicio_1
+                                  ? `<li>${post.servicio_1}</li>`
+                                  : ""
+                              }
+                              ${
+                                post.servicio_2
+                                  ? `<li>${post.servicio_2}</li>`
+                                  : ""
+                              }
+                              ${
+                                post.servicio_3
+                                  ? `<li>${post.servicio_3}</li>`
+                                  : ""
+                              }
+                              ${
+                                post.servicio_4
+                                  ? `<li>${post.servicio_4}</li>`
+                                  : ""
+                              }
+                              </ul>
+                            </div>
+                            `
+                                : ""
+                            }
+                              `
+                            : linkHomeExist
+                            ? `<div class="sale-home-container">
+                            <h4>Casas en venta</h4>
+                            <div class="sale-home-icons-container">
+                            ${
+                              post.link_casa_1
+                                ? `<a href="${post.link_casa_1}">
+                                      <i class="fa-solid fa-house"></i>
+                                  </a>`
+                                : ""
+                            }
+                            ${
+                              post.link_casa_2
+                                ? `<a href="${post.link_casa_2}">
+                                    <i class="fa-solid fa-house"></i>
+                                </a>`
+                                : ""
+                            }
+                            ${
+                              post.link_casa_3
+                                ? `<a href="${post.link_casa_3}">
+                                    <i class="fa-solid fa-house"></i>
+                                </a>`
+                                : ""
+                            }
+                            ${
+                              post.link_casa_4
+                                ? `<a href="${post.link_casa_4}">
+                                    <i class="fa-solid fa-house"></i>
+                                </a>`
+                                : ""
+                            }
+                            </div>
+                        </div>`
+                            : ""
+                        }                   
+
+                        <div class="main-info-location">
+                            <div class="location-container">
+                            <p><strong>Ciudad:</strong> ${post.ciudad}</p>
+                            <p><strong>Estado:</strong> ${post.estado}</p>
+                            </div>
+                            <div class="postal-code-container">
+                            <strong>Códigos Postales</strong>
+                            <p>${post.codigo_postal}</p>
+                            </div>
+                        </div>
+                        </section>
+                        <section class="podcast-button-section">
+                        ${
+                          post.link_podcast
+                            ? `<div class="podcast-button-link-container">
+                            <a href="${post.link_podcast}" class="podcast-button-link">
+                            <div class="podcast-button-main-content">
+                                <i class="fa-solid fa-podcast"></i>
+                                <span>Podcast #${post.numero_podcast}</span>
+                            </div>
+                            <p class="podcast-button-subtitle">youtube.com</p>
+                            </a>
+                        </div>`
+                            : ""
+                        }
+                        
+                        </section>
+                    </article>
+                `;
 
               categoryResults.appendChild(postElement);
             });
